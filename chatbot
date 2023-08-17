@@ -1,0 +1,102 @@
+class TravelChatbot:
+    def _init_(self):
+        self.bus_timings = {
+            ("place1", "place2"): ["08:00 AM", "11:30 AM", "03:00 PM"],
+            # Add more bus routes and timings as needed
+        }
+        
+        self.train_timings = {
+            ("place1", "place2"): ["09:00 AM", "01:30 PM", "05:00 PM"],
+            # Add more train routes and timings as needed
+        }
+        
+        self.hotel_info = {
+            "hotel_name": "Grand Hotel",
+            "check_in_time": "02:00 PM",
+            "check_out_time": "11:00 AM",
+            "food_options": ["Breakfast", "Lunch", "Dinner"],
+        }
+        
+        self.lodge_info = {
+            "lodge_name": "Cozy Lodge",
+            "check_in_time": "03:00 PM",
+            "check_out_time": "10:00 AM",
+            "amenities": ["Free Wi-Fi", "Parking", "Room Service"],
+        }
+        
+        self.restaurants = {
+            "restaurant1": ["Cuisine1", "Cuisine2", "Cuisine3"],
+            "restaurant2": ["Cuisine4", "Cuisine5", "Cuisine6"],
+            # Add more restaurants and their cuisines as needed
+        }
+        
+    def get_bus_timings(self, source, destination):
+        key = (source.lower(), destination.lower())
+        if key in self.bus_timings:
+            timings = self.bus_timings[key]
+            return f"Bus timings from {source} to {destination}: {', '.join(timings)}"
+        else:
+            return "Sorry, bus timings for this route are not available."
+    
+    def get_train_timings(self, source, destination):
+        key = (source.lower(), destination.lower())
+        if key in self.train_timings:
+            timings = self.train_timings[key]
+            return f"Train timings from {source} to {destination}: {', '.join(timings)}"
+        else:
+            return "Sorry, train timings for this route are not available."
+    
+    def get_hotel_info(self):
+        return f"{self.hotel_info['hotel_name']}:\nCheck-in Time: {self.hotel_info['check_in_time']}\nCheck-out Time: {self.hotel_info['check_out_time']}\nFood Options: {', '.join(self.hotel_info['food_options'])}"
+    
+    def get_lodge_info(self):
+        return f"{self.lodge_info['lodge_name']}:\nCheck-in Time: {self.lodge_info['check_in_time']}\nCheck-out Time: {self.lodge_info['check_out_time']}\nAmenities: {', '.join(self.lodge_info['amenities'])}"
+    
+    def get_restaurant_info(self, restaurant_name):
+        if restaurant_name in self.restaurants:
+            cuisines = self.restaurants[restaurant_name]
+            return f"{restaurant_name} offers: {', '.join(cuisines)}"
+        else:
+            return "Restaurant not found. Please check the name and try again."
+    
+    def respond(self, user_input):
+        if "bus timings" in user_input:
+            parts = user_input.split("from")
+            if len(parts) == 2:
+                source = parts[1].strip().split("to")[0].strip()
+                destination = parts[1].strip().split("to")[1].strip()
+                return self.get_bus_timings(source, destination)
+            else:
+                return "Please provide the source and destination for bus timings."
+        elif "train timings" in user_input:
+            parts = user_input.split("from")
+            if len(parts) == 2:
+                source = parts[1].strip().split("to")[0].strip()
+                destination = parts[1].strip().split("to")[1].strip()
+                return self.get_train_timings(source, destination)
+            else:
+                return "Please provide the source and destination for train timings."
+        elif "hotel" in user_input:
+            return self.get_hotel_info()
+        elif "lodge" in user_input:
+            return self.get_lodge_info()
+        elif "restaurant" in user_input:
+            restaurant_name = user_input.split("restaurant")[1].strip()
+            return self.get_restaurant_info(restaurant_name)
+        else:
+            return "I'm sorry, I can't understand your request."
+
+def main():
+    chatbot = TravelChatbot()
+    print("Welcome to the Travel Chatbot!")
+    
+    while True:
+        user_input = input("You: ")
+        if user_input.lower() == "exit":
+            print("Chatbot: Goodbye!")
+            break
+        response = chatbot.respond(user_input)
+        print("Chatbot:", response)
+
+if _name_ == "_main_":
+    main()
